@@ -2463,12 +2463,12 @@ class TestMultipleToolCalls:
 
         def llm(messages: list[ModelMessage], _info: AgentInfo) -> ModelResponse:
             # If any request already has tool returns, end with a text response
-            for msg in reversed(messages):  # pragma: no cover
+            for msg in reversed(messages):
                 if isinstance(msg, ModelRequest) and any(
                     isinstance(p, ToolReturnPart) for p in msg.parts
                 ):  # pragma: no cover
-                    return ModelResponse(parts=[TextPart('done')])  # pragma: no cover
-            return ModelResponse(  # pragma: no cover
+                    return ModelResponse(parts=[TextPart('done')])
+            return ModelResponse(
                 parts=[
                     ToolCallPart('sum', {'a': 1, 'b': 2}, tool_call_id='sum-1'),
                     ToolCallPart('sum', {'a': 3, 'b': 4}, tool_call_id='sum-2'),
@@ -2518,11 +2518,11 @@ class TestMultipleToolCalls:
         """Multiple consecutive ModelResponses with tool calls are merged; new_messages includes a request with all ToolReturnParts."""
 
         def llm(messages: list[ModelMessage], _info: AgentInfo) -> ModelResponse:
-            for msg in reversed(messages):  # pragma: no cover
+            for msg in reversed(messages):
                 if isinstance(msg, ModelRequest) and any(
                     isinstance(p, ToolReturnPart) for p in msg.parts
                 ):  # pragma: no cover
-                    return ModelResponse(parts=[TextPart('done')])  # pragma: no cover
+                    return ModelResponse(parts=[TextPart('done')])
             # First pass: emit tool calls one per response; the agent merges them
             for msg in reversed(messages):  # pragma: no cover
                 if isinstance(msg, ModelResponse):  # pragma: no cover
